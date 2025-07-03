@@ -1,0 +1,26 @@
+/* Reset và full height */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow-x: hidden;
+  font-family: "Segoe UI", sans-serif;
+}
+
+#root {
+  height: 100%;
+}
+/* Ép notification hiển thị với z-index cao hơn mọi thành phần */
+.ant-notification {
+  z-index: 9999 !important;
+}
+
+/* Nếu layout của bạn dùng overflow: hidden, notification sẽ bị cắt — fix tạm thời */
+body {
+  overflow: visible !important;
+}
