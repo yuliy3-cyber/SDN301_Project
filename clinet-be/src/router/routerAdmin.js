@@ -351,6 +351,29 @@ router.get("/results", async (req, res) => {
     res.status(500).json({ message: "Lỗi máy chủ", error: err.message });
   }
 });
+router.get("/result", async (req, res) => {
+  try {
+    const exams = await Exam.find().lean(); // lấy danh sách đề thi
+
+    // Duyệt từng đề và đếm số kết quả
+    const data = await Promise.all(
+      exams.map(async (exam) => {
+        const count = await Result.countDocuments({ examId: exam._id });
+        return {
+          _id: exam._id,
+          title: exam.title,
+          code: exam.code,
+          totalResults: count,
+        };
+      })
+    );
+
+    res.status(200).json(data);
+  } catch (err) {
+    console.error("❌ Lỗi khi lấy danh sách kết quả:", err.message);
+    res.status(500).json({ message: "Lỗi máy chủ", error: err.message });
+  }
+});
 
 // Thêm các route này vào file admin.js của bạn
 

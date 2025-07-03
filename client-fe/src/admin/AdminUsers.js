@@ -290,7 +290,7 @@ const AdminUsers = () => {
                 onChange={setFilterRole}
                 style={{ width: '100%' }}
               >
-                <Option value="all">Tất cả vai trò</Option>
+             
                 <Option value="admin">Admin</Option>
                 <Option value="user">User</Option>
               </Select>
