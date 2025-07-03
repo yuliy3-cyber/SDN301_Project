@@ -135,6 +135,7 @@ function AdminDashboard() {
         <Col xs={24} sm={12} lg={8}>
           <Card 
             hoverable
+             onClick={() => handleRedirect("http://localhost:3000/admin/users")}
             style={{ 
               borderRadius: "12px",
               boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
@@ -147,6 +148,7 @@ function AdminDashboard() {
                   title={<Text style={{ fontSize: "14px", fontWeight: "500" }}>Tổng số người dùng</Text>}
                   value={totalUsers}
                   valueStyle={{ color: '#52c41a', fontSize: "28px", fontWeight: "bold" }}
+                  
                 />
                 <Badge status="success" text="Đang hoạt động" />
               </div>
@@ -158,6 +160,7 @@ function AdminDashboard() {
         <Col xs={24} sm={12} lg={8}>
           <Card 
             hoverable
+                   onClick={() => handleRedirect("http://localhost:3000/admin/questions")}
             style={{ 
               borderRadius: "12px",
               boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
@@ -181,6 +184,7 @@ function AdminDashboard() {
         <Col xs={24} sm={12} lg={8}>
           <Card 
             hoverable
+                 onClick={() => handleRedirect("http://localhost:3000/admin/results")}
             style={{ 
               borderRadius: "12px",
               boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
@@ -292,6 +296,7 @@ function AdminDashboard() {
 
       {/* System Status */}
       <Card 
+
         style={{ 
           borderRadius: "12px",
           boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
