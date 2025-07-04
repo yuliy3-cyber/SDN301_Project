@@ -19,9 +19,9 @@ const CreateQuestion = () => {
     content: "",
     options: ["", "", "", ""],
     correctAnswer: 0,
-    explanation: "",
     subject: "",
-    level: "easy"
+    level: "easy",
+     duration: 10
   });
 
   const [questions, setQuestions] = useState([]);
@@ -53,9 +53,9 @@ const CreateQuestion = () => {
       content: "",
       options: ["", "", "", ""],
       correctAnswer: 0,
-      explanation: "",
       subject: "",
-      level: "easy"
+      level: "easy",
+     
     });
     setErrors({});
     setEditingQuestion(null);
@@ -65,7 +65,10 @@ const CreateQuestion = () => {
     const newErrors = {};
     if (!formData.content.trim()) newErrors.content = "Vui lòng nhập nội dung câu hỏi!";
     if (!formData.subject.trim()) newErrors.subject = "Vui lòng nhập chủ đề!";
-    if (!formData.explanation.trim()) newErrors.explanation = "Vui lòng nhập giải thích!";
+    if (!formData.duration || formData.duration <= 0) {
+  newErrors.duration = "Thời gian phải lớn hơn 0!";
+}
+
     formData.options.forEach((opt, i) => {
       if (!opt.trim()) newErrors[`option${i}`] = `Vui lòng nhập đáp án ${i + 1}`;
     });
@@ -205,6 +208,21 @@ const CreateQuestion = () => {
             </Select>
           </Col>
         </Row>
+        <Row gutter={16} style={{ marginTop: 16 }}>
+  <Col span={12}>
+    <Text strong>Thời gian làm câu hỏi (phút) *</Text>
+    <Input
+      type="number"
+      min={1}
+      value={formData.duration}
+      onChange={(e) => handleInputChange("duration", parseInt(e.target.value))}
+      placeholder="VD: 2"
+      style={{ marginTop: "8px", borderColor: errors.duration ? "#ff4d4f" : undefined }}
+    />
+    {errors.duration && <Text type="danger">{errors.duration}</Text>}
+  </Col>
+</Row>
+
 
         <Title level={4} style={{ marginTop: "24px" }}>Các đáp án</Title>
         <Row gutter={16}>
@@ -236,17 +254,7 @@ const CreateQuestion = () => {
           </Radio.Group>
         </div>
 
-        <div style={{ marginTop: "24px" }}>
-          <Text strong>Giải thích *</Text>
-          <TextArea
-            rows={3}
-            placeholder="Nhập lời giải thích..."
-            value={formData.explanation}
-            onChange={(e) => handleInputChange("explanation", e.target.value)}
-            style={{ marginTop: "8px", borderColor: errors.explanation ? "#ff4d4f" : undefined }}
-          />
-          {errors.explanation && <Text type="danger">{errors.explanation}</Text>}
-        </div>
+        
 
         <Button
           type="primary"
@@ -304,9 +312,10 @@ const CreateQuestion = () => {
                             content: q.content,
                             options: q.options,
                             correctAnswer: q.correctAnswer,
-                            explanation: q.explanation,
+                          
                             subject: q.subject,
-                            level: q.level
+                            level: q.level,
+                            duration: q.duration || 10
                           });
                           setEditingQuestion(q._id);
                           setIsModalVisible(true);
@@ -330,7 +339,7 @@ const CreateQuestion = () => {
                       </li>
                     ))}
                   </ul>
-                  <p><Text strong>Giải thích:</Text> <Text italic>{q.explanation}</Text></p>
+              
                 </Card>
               </List.Item>
             )}
@@ -389,6 +398,20 @@ const CreateQuestion = () => {
             </Select>
           </Col>
         </Row>
+<Row gutter={16} style={{ marginTop: 16 }}>
+  <Col span={12}>
+    <Text strong>Thời gian làm câu hỏi (phút) *</Text>
+    <Input
+      type="number"
+      min={1}
+      value={formData.duration}
+      onChange={(e) => handleInputChange("duration", parseInt(e.target.value))}
+      placeholder="VD: 2"
+      style={{ marginTop: "8px", borderColor: errors.duration ? "#ff4d4f" : undefined }}
+    />
+    {errors.duration && <Text type="danger">{errors.duration}</Text>}
+  </Col>
+</Row>
 
         <Title level={5} style={{ marginTop: "24px" }}>Các đáp án</Title>
         <Row gutter={16}>
@@ -420,17 +443,7 @@ const CreateQuestion = () => {
           </Radio.Group>
         </div>
 
-        <div style={{ marginTop: "24px" }}>
-          <Text strong>Giải thích *</Text>
-          <TextArea
-            rows={3}
-            placeholder="Nhập lời giải thích..."
-            value={formData.explanation}
-            onChange={(e) => handleInputChange("explanation", e.target.value)}
-            style={{ marginTop: "8px", borderColor: errors.explanation ? "#ff4d4f" : undefined }}
-          />
-          {errors.explanation && <Text type="danger">{errors.explanation}</Text>}
-        </div>
+        
       </Modal>
     </div>
   );

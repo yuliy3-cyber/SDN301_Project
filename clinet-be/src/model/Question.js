@@ -7,6 +7,7 @@ const questionSchema = new mongoose.Schema({
   explanation: String,
   subject: String,
   level: String,
+   duration: Number, 
   createdAt: { type: Date, default: Date.now }
 });
 

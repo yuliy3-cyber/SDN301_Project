@@ -30,6 +30,8 @@ const UserResults = () => {
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [editing, setEditing] = useState(false);
+const [formValues, setFormValues] = useState({});
 
   useEffect(() => {
     const fetchResults = async () => {

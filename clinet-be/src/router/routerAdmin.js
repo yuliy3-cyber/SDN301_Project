@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Question = require("../model/Question");
 const User = require("../model/userBE");
-
+const bcrypt = require("bcryptjs");
 const Exam = require("../model/Exam");
 const Result = require("../model/Result");
 const { verifyToken, checkRole } = require("../middleware/auth");
@@ -55,21 +55,24 @@ router.patch("/user/:id", verifyToken, checkRole("admin"), async (req, res) => {
 });
 router.post("/questions", async (req, res) => {
   try {
-    const { content, options, correctAnswer, explanation, subject, level } = req.body;
+    const { content, options, correctAnswer, subject, level, duration } = req.body;
+
+const newQuestion = new Question({
+  content,
+  options,
+  correctAnswer,
+  subject,
+  level,
+  duration,
+  createdAt: new Date()
+});
+
 
     if (!content || !Array.isArray(options) || options.length < 2) {
       return res.status(400).json({ message: "Thiếu dữ liệu hoặc sai định dạng" });
     }
 
-    const newQuestion = new Question({
-      content,
-      options,
-      correctAnswer,
-      explanation,
-      subject,
-      level,
-      createdAt: new Date()
-    });
+   
 
     await newQuestion.save();
     res.status(201).json({ message: "✅ Tạo câu hỏi thành công", question: newQuestion });
@@ -208,6 +211,86 @@ router.get("/user", verifyToken, checkRole("admin"), async (req, res) => {
 
 module.exports = router;
 
+/**
+ * @route PUT /user/:id
+ * @desc Cập nhật thông tin người dùng (bởi chính họ hoặc admin)
+ */
+router.put("/user/:id", verifyToken, async (req, res) => {
+  try {
+    const { fullName, email, phone, address, avatar } = req.body;
+
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.id,
+      { fullName, email, phone, address, avatar },
+      { new: true }
+    ).select("-password");
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "Không tìm thấy người dùng" });
+    }
+
+    res.status(200).json({ message: "✅ Cập nhật thành công", user: updatedUser });
+  } catch (err) {
+    res.status(500).json({ message: "Lỗi cập nhật người dùng", error: err.message });
+  }
+});
+router.put("/user/:id/password", verifyToken, async (req, res) => {
+  const userId = req.params.id;
+  const { currentPassword, newPassword } = req.body;
+
+  try {
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({ message: "Vui lòng nhập đầy đủ mật khẩu" });
+    }
+
+    // Lấy thông tin người dùng
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ message: "Không tìm thấy người dùng" });
+
+    // So sánh mật khẩu cũ
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: "Mật khẩu hiện tại không đúng" });
+    }
+
+    // Hash và cập nhật mật khẩu mới
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+    user.password = hashedPassword;
+    await user.save();
+
+    res.status(200).json({ message: "✅ Đổi mật khẩu thành công" });
+  } catch (err) {
+    console.error("❌ Lỗi đổi mật khẩu:", err.message);
+    res.status(500).json({ message: "Lỗi máy chủ", error: err.message });
+  }
+});
+router.put("/user/:id/avatar", verifyToken, async (req, res) => {
+  const userId = req.params.id;
+  const { avatar } = req.body;
+
+  try {
+    if (!avatar) {
+      return res.status(400).json({ message: "Thiếu dữ liệu avatar" });
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { avatar },
+      { new: true }
+    ).select("-password");
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "Không tìm thấy người dùng" });
+    }
+
+    res.status(200).json({ message: "✅ Avatar đã được cập nhật", user: updatedUser });
+  } catch (err) {
+    console.error("❌ Lỗi cập nhật avatar:", err.message);
+    res.status(500).json({ message: "Lỗi máy chủ", error: err.message });
+  }
+});
 
 
 /**

@@ -3,6 +3,9 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
+const uploadRoutes = require("../router/upload.js");
+const path = require("path");
+
 
 dotenv.config();
 
@@ -19,7 +22,7 @@ const registerRouter = require("../router/registerAdmin");
 const server = express();
 server.use(cors({ origin: "http://localhost:3000", credentials: true }));
 server.use(express.json());
-
+server.use("/uploads", express.static(path.join(__dirname, "..", "uploads")));
 // ✅ Đăng nhập
 server.post("/login", login);
 server.use("/", registerRouter);
@@ -30,6 +33,8 @@ server.use("/", examRouter);
 server.use("/", resultRouter);
 server.use("/admin", adminRouter);
 server.use("/result", resultRouter);
+
+server.use("/upload", uploadRoutes);
 
 // ✅ Swagger
 const swaggerSpec = swaggerJsDoc({

@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { Form, Input, Button, Typography, Alert, Card } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import axios from "axios";
+// import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
+import axios from "../axiosInstance";
 const { Title } = Typography;
 
 function Login() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -21,20 +22,23 @@ function Login() {
   }, [navigate]);
 
   const onFinish = async (values) => {
-    setError("");
-    try {
-      const res = await axios.post("http://localhost:9999/login", values);
-      const { token, role, userId } = res.data;
+  setError("");
+  setLoading(true);
+  try {
+    const res = await axios.post("/login", values);
+    const { token, role, userId } = res.data;
 
-      localStorage.setItem("token", token);
-      localStorage.setItem("role", role);
-      localStorage.setItem("userId", userId); 
+    localStorage.setItem("token", token);
+    localStorage.setItem("role", role);
+    localStorage.setItem("userId", userId);
 
-      navigate(role === "admin" ? "/admin" : "/user");
-    } catch (err) {
-      setError(err.response?.data?.message || "Đăng nhập thất bại");
-    }
-  };
+    navigate(role === "admin" ? "/admin" : "/user");
+  } catch (err) {
+    setError(err.response?.data?.message || "Đăng nhập thất bại");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div
@@ -86,9 +90,10 @@ function Login() {
           </Form.Item>
 
           <Form.Item>
-            <Button type="primary" htmlType="submit" block>
-              Đăng nhập
-            </Button>
+          <Button type="primary" htmlType="submit" block loading={loading}>
+  Đăng nhập
+</Button>
+
           </Form.Item>
         </Form>
 

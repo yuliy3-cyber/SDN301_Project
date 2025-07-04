@@ -283,18 +283,7 @@ const AdminUsers = () => {
                 allowClear
               />
             </Col>
-            <Col xs={12} sm={6} md={4}>
-              <Select
-                placeholder="Vai trò"
-                value={filterRole}
-                onChange={setFilterRole}
-                style={{ width: '100%' }}
-              >
-             
-                <Option value="admin">Admin</Option>
-                <Option value="user">User</Option>
-              </Select>
-            </Col>
+          
             <Col xs={12} sm={6} md={4}>
               <Select
                 placeholder="Trạng thái"
