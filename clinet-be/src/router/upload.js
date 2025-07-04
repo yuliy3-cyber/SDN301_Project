@@ -8,6 +8,7 @@ const fs = require("fs");
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     const uploadPath = path.join(__dirname, "..", "..", "uploads");
+
     
     // Nếu folder chưa tồn tại thì tạo
     if (!fs.existsSync(uploadPath)) {

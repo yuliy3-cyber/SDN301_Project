@@ -18,11 +18,13 @@ const adminRouter = require("../router/routerAdmin");
 const resultRouter = require("../router/routerResult");
 const examRouter = require("../router/routerAdmin");
 const registerRouter = require("../router/registerAdmin");
+const uploadsPath = path.join(__dirname, "..", "uploads");
 
 const server = express();
 server.use(cors({ origin: "http://localhost:3000", credentials: true }));
 server.use(express.json());
-server.use("/uploads", express.static(path.join(__dirname, "..", "uploads")));
+server.use("/uploads", express.static(path.resolve(__dirname, "../../uploads")));
+
 // ✅ Đăng nhập
 server.post("/login", login);
 server.use("/", registerRouter);
