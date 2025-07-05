@@ -10,6 +10,7 @@ function UserDashboard() {
 
   const userId = localStorage.getItem("userId"); // bạn cần đảm bảo đã lưu từ lúc login
   const username = localStorage.getItem("username") || "User";
+  const fullName = localStorage.getItem("fullName")
 
   const [stats, setStats] = useState({
     total: 0,

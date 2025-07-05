@@ -338,16 +338,9 @@ const UserProfile = () => {
                   onClick={handleEditClick}
                   style={{ borderColor: 'white', color: 'white' }}
                 >
-                  Chỉnh sửa
+                  Chỉnh sửa thông tin
                 </Button>
-                <Button
-                  type="primary"
-                  ghost
-                  icon={<SettingOutlined />}
-                  style={{ borderColor: 'white', color: 'white' }}
-                >
-                  Cài đặt
-                </Button>
+            
               </Space>
             </Col>
           </Row>

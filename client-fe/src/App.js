@@ -17,6 +17,7 @@ import AdminTests from "./admin/AdminTests";
 import MainLayout from "./layout/mainlayout/MainLayout";
 import "antd/dist/reset.css";
 import Register from "./pages/register";
+import ForgotPassword from "./pages/ForgotPassword";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/" element={<LandingPage />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
 
   
       <Route element={<RequireAuth allowedRoles={["user"]} />}>
@@ -35,6 +37,7 @@ function App() {
           <Route path="/user/results" element={<UserResults />} />
           <Route path="/user/profile" element={<UserProfile />} />
           <Route path="/user/questions" element={<PracticeQuiz />} />
+          
        
         </Route>
       </Route>

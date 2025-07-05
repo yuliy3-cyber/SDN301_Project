@@ -240,7 +240,7 @@ function AdminDashboard() {
               onClick={() => handleRedirect("http://localhost:3000/admin/questions")}
             >
               <div>
-                <div>Tạo kỳ thi</div>
+                <div>Tạo câu hỏi</div>
                 <Text style={{ fontSize: "12px", color: "rgba(255,255,255,0.8)" }}>
                   Tạo bài kiểm tra mới
                 </Text>
